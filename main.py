@@ -82,7 +82,7 @@ def jaka_para(update, context):
     else:
         text="Чілим 😴"
 
-    context.bot.send_message(chat_id=update.message.chat_id, text="123")
+    context.bot.send_message(chat_id=update.message.chat_id, text=text)
 
 # Ініціалізація об'єкту бота та диспетчера
 bot = telegram.Bot(token=bot_token)
