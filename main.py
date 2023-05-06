@@ -1,11 +1,11 @@
 import datetime
 import telegram
-from telegram.ext import Updater, CommandHandler, Filters
+from telegram.ext import Updater, CommandHandler
 
 bot_token = '6052645146:AAF_T-kpgMBSnyAvUbddYyf2xkNX93MLlAo'
 
 def start(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text='Введіть /jaka_para щоб отримати посилання на пару')
+    context.bot.send_message(chat_id=update.message.chat_id, text='Введіть /jaka_para щоб отримати посилання на пару')
 
 # Функція-відповідь на команду /jaka_para
 def jaka_para(update, context):
