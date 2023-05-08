@@ -1,8 +1,11 @@
 import datetime
 import telegram
 from telegram.ext import Updater, CommandHandler
+import openai
 
+openai.api_key = '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'
 bot_token = '6052645146:AAF_T-kpgMBSnyAvUbddYyf2xkNX93MLlAo'
+# bot_token = '6008785242:AAHu0HQuInrisoPKu5yImtaDsc8JDpTHMe4'
 
 
 def start(update, context):
@@ -89,16 +92,31 @@ def jaka_para(update, context):
 
     context.bot.send_message(chat_id=update.message.chat_id, text=text)
 
+def chatGPT(update, context):
+    def get_ressult_from_chatGPT(text: str):
+        response = openai.ChatCompletion.create(
+            model = "gpt-3.5-turbo",
+            messages = [{"role": "assistant" ,"content": text}],
+            temperature = 0.8,
+            max_tokens = 1500,
+            top_p = 1,
+            frequency_penalty = 0,
+            presence_penalty = 0.6,
+        )
+        return response['choices'][0]['message']['content']
+
+    context.bot.send_message(chat_id=update.message.chat_id,
+                             text="Смішний ChatGPT:\n" + get_ressult_from_chatGPT("Українською мовою, 1-3 речення, придамай смішний анекдот"))
+
+
 # Ініціалізація об'єкту бота та диспетчера
 bot = telegram.Bot(token=bot_token)
 updater = Updater(bot_token)
 dispatcher = updater.dispatcher
 
-# створюємо обробник команди "/start"
 dispatcher.add_handler(CommandHandler('start', start))
-
-# Додавання обробника команди /jaka_para
 dispatcher.add_handler(CommandHandler('jaka_para', jaka_para))
+dispatcher.add_handler(CommandHandler('chatGPT', chatGPT))
 
 # Запуск бота
 updater.start_polling()
