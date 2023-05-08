@@ -3,6 +3,7 @@ import telegram
 from telegram.ext import Updater, CommandHandler
 
 bot_token = '6052645146:AAF_T-kpgMBSnyAvUbddYyf2xkNX93MLlAo'
+# bot_token = '6008785242:AAHu0HQuInrisoPKu5yImtaDsc8JDpTHMe4'
 
 def start(update, context):
     context.bot.send_message(chat_id=update.message.chat_id, text='Введіть /jaka_para щоб отримати посилання на пару')
@@ -13,6 +14,10 @@ def jaka_para(update, context):
     day_of_week = datetime.datetime.today().strftime("%A")
     day = datetime.datetime.today().day
     month = datetime.datetime.today().month
+
+    context.bot.send_message(chat_id=update.message.chat_id, text=current_time)
+    context.bot.send_message(chat_id=update.message.chat_id, text=day_of_week)
+    context.bot.send_message(chat_id=update.message.chat_id, text=day)
 
     if day_of_week == "Monday":
 
