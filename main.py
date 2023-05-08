@@ -10,7 +10,7 @@ def start(update, context):
 
 # Функція-відповідь на команду /jaka_para
 def jaka_para(update, context):
-    current_time = float(datetime.datetime.now().strftime("%H.%M"))
+    current_time = float(datetime.datetime.now().strftime("%H.%M")) + 3
     day_of_week = datetime.datetime.today().strftime("%A")
     day = datetime.datetime.today().day
     month = datetime.datetime.today().month
