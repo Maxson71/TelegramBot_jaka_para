@@ -3,7 +3,7 @@ import telegram
 from telegram.ext import Updater, CommandHandler
 
 bot_token = '6052645146:AAF_T-kpgMBSnyAvUbddYyf2xkNX93MLlAo'
-# bot_token = '6008785242:AAHu0HQuInrisoPKu5yImtaDsc8JDpTHMe4'
+
 
 def start(update, context):
     context.bot.send_message(chat_id=update.message.chat_id, text='Введіть /jaka_para щоб отримати посилання на пару')
@@ -29,7 +29,7 @@ def jaka_para(update, context):
             if (day+month)% 2 == 0:
                 text = "Культура мовлення (Лекція) 😊 12:20\nhttps://bbb.comsys.kpi.ua/b/myk-0iw-red-p01"
             else:
-                text="Вища математика (Лекція) 😬 12:20\nhttps://us05web.zoom.us/j/81227675458?pwd=SWFuQTZLY2w5a2dMMjd0cTdxSUN6dz09"
+                text="Вища математика (Лекція) 😬 12:20\nhttps://us04web.zoom.us/j/2684350438?pwd=kiOi3BrgbJHeYvkrx7qaSxa08J8m8O.1"
         else:
             text="Чілим 😴"
 
@@ -59,7 +59,7 @@ def jaka_para(update, context):
     elif day_of_week == "Thursday":
 
         if current_time >= 9.55 and current_time <= 11.50:
-            text = "Вища математика (Лекція) 😬 10:25\nhttps://us05web.zoom.us/j/81227675458?pwd=SWFuQTZLY2w5a2dMMjd0cTdxSUN6dz09"
+            text = "Вища математика (Лекція) 😬 10:25\nhttps://us04web.zoom.us/j/2684350438?pwd=kiOi3BrgbJHeYvkrx7qaSxa08J8m8O.1"
         elif current_time >= 11.50 and current_time <= 13.45:
             text = "Фізика (Лекція) 😬 12:20\nА посилання Русаков знову забув скинути"
         elif current_time >= 13.45 and current_time <= 15.40:
