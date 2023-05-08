@@ -15,9 +15,9 @@ def jaka_para(update, context):
     day = datetime.datetime.today().day
     month = datetime.datetime.today().month
 
-    context.bot.send_message(chat_id=update.message.chat_id, text=current_time)
-    context.bot.send_message(chat_id=update.message.chat_id, text=day_of_week)
-    context.bot.send_message(chat_id=update.message.chat_id, text=day)
+    # context.bot.send_message(chat_id=update.message.chat_id, text=current_time)
+    # context.bot.send_message(chat_id=update.message.chat_id, text=day_of_week)
+    # ontext.bot.send_message(chat_id=update.message.chat_id, text=day)
 
     if day_of_week == "Monday":
 
