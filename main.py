@@ -98,7 +98,7 @@ def chatGPT(update, context):
         response = openai.ChatCompletion.create(
             model = "gpt-3.5-turbo",
             messages = [{"role": "assistant" ,"content": text}],
-            temperature = 0,
+            temperature = 1,
             max_tokens = 1500,
             top_p = 1,
             frequency_penalty = 0,
