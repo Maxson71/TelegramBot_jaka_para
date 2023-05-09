@@ -2,16 +2,17 @@ import datetime
 import telegram
 from telegram.ext import Updater, CommandHandler
 import openai
+import os
+from dotenv import load_dotenv, find_dotenv
 
-openai.api_key = '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'
-bot_token = '6052645146:AAF_T-kpgMBSnyAvUbddYyf2xkNX93MLlAo'
-# bot_token = '6008785242:AAHu0HQuInrisoPKu5yImtaDsc8JDpTHMe4'
+load_dotenv(find_dotenv())
 
+openai.api_key = os.getenv('API_TOKEN')
+bot_token = os.getenv('TELEGRAM_TOKEN')
 
 def start(update, context):
     context.bot.send_message(chat_id=update.message.chat_id, text='Введіть /jaka_para щоб отримати посилання на пару')
 
-# Функція-відповідь на команду /jaka_para
 def jaka_para(update, context):
     current_time = float(datetime.datetime.now().strftime("%H.%M")) + 3
     day_of_week = datetime.datetime.today().strftime("%A")
@@ -104,12 +105,9 @@ def chatGPT(update, context):
             presence_penalty = 0.6,
         )
         return response['choices'][0]['message']['content']
-
     context.bot.send_message(chat_id=update.message.chat_id,
                              text="Смішний ChatGPT:\n" + get_ressult_from_chatGPT("Українською мовою, 1-3 речення, придамай смішний анекдот"))
 
-
-# Ініціалізація об'єкту бота та диспетчера
 bot = telegram.Bot(token=bot_token)
 updater = Updater(bot_token)
 dispatcher = updater.dispatcher
@@ -118,5 +116,4 @@ dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('jaka_para', jaka_para))
 dispatcher.add_handler(CommandHandler('chatGPT', chatGPT))
 
-# Запуск бота
 updater.start_polling()
