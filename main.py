@@ -106,7 +106,7 @@ def chatGPT(update, context):
         )
         return response['choices'][0]['message']['content']
     context.bot.send_message(chat_id=update.message.chat_id,
-                             text="Смішний ChatGPT:\n" + get_ressult_from_chatGPT("Українською мовою, 1-3 речення, придамай смішний анекдот"))
+                             text="Смішний ChatGPT:\n" + get_ressult_from_chatGPT("Українською мовою, 1-3 речення, придумай смішний анекдот"))
 
 bot = telegram.Bot(token=bot_token)
 updater = Updater(bot_token)
