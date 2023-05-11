@@ -123,6 +123,7 @@ def smishunka(update, context):
 def smishunkaVidRusakova(update, context):
     context.bot.send_message(chat_id=update.message.chat_id,text="Смішний Русаков (або не дуже):\n")
     text = get_ressult_from_chatGPT("Ти вчитель фізики (нудний, інколи злий) українською мовою придамай маленький анекдот або історію")
+    context.bot.send_message(chat_id=update.message.chat_id, text=text)
     context.bot.send_photo(chat_id=update.message.chat_id, photo=get_image_from_dall_e(text))
 
 bot = telegram.Bot(token=bot_token)
