@@ -11,7 +11,11 @@ openai.api_key = os.getenv('API_TOKEN')
 bot_token = os.getenv('TELEGRAM_TOKEN')
 
 def start(update, context):
-    context.bot.send_message(chat_id=update.message.chat_id, text='Введіть /jaka_para щоб отримати посилання на пару')
+    context.bot.send_message(chat_id=update.message.chat_id, text='Введіть /jaka_para щоб отримати посилання на пару.'
+                                                                  '\nІнші команди:'
+                                                                  '\n/smishunka'
+                                                                  '\n/smishunkaVidRusakova')
+
 
 def jaka_para(update, context):
     current_time = float(datetime.datetime.now().strftime("%H.%M")) + 3
@@ -65,7 +69,7 @@ def jaka_para(update, context):
         if current_time >= 9.55 and current_time <= 11.50:
             text = "Вища математика (Лекція) 😬 10:25\nhttps://us04web.zoom.us/j/2684350438?pwd=kiOi3BrgbJHeYvkrx7qaSxa08J8m8O.1"
         elif current_time >= 11.50 and current_time <= 13.45:
-            text = "Фізика (Лекція) 😬 12:20\nА посилання Русаков знову забув скинути"
+            text = "Фізика (Лекція) 😬 12:20\nhttps://meet.google.com/ivm-vfpz-ugo"
         elif current_time >= 13.45 and current_time <= 15.40:
             text = "Програмування (Лекція) 😊 14:15\nhttps://us02web.zoom.us/j/2711546637?pwd=Ry82RHp3SjV6WTZRMXl6WUNod25hUT09"
         else:
@@ -93,20 +97,32 @@ def jaka_para(update, context):
 
     context.bot.send_message(chat_id=update.message.chat_id, text=text)
 
-def chatGPT(update, context):
-    def get_ressult_from_chatGPT(text: str):
-        response = openai.ChatCompletion.create(
-            model = "gpt-3.5-turbo",
-            messages = [{"role": "assistant" ,"content": text}],
-            temperature = 0.8,
-            max_tokens = 1500,
-            top_p = 1,
-            frequency_penalty = 0,
-            presence_penalty = 0.6,
-        )
-        return response['choices'][0]['message']['content']
+def get_ressult_from_chatGPT(text: str):
+    response = openai.ChatCompletion.create(
+        model = "gpt-3.5-turbo",
+        messages = [{"role": "assistant" ,"content": text}],
+        temperature = 0.8,
+        max_tokens = 1500,
+        top_p = 1,
+        frequency_penalty = 0,
+        presence_penalty = 0.6,
+    )
+    return response['choices'][0]['message']['content']
+
+def smishunka(update, context):
+
     context.bot.send_message(chat_id=update.message.chat_id,
-                             text="Смішний ChatGPT:\n" + get_ressult_from_chatGPT("Українською мовою, 1-3 речення, придамай смішний анекдот"))
+                             text="Смішний ChatGPT:\n")
+    context.bot.send_message(chat_id=update.message.chat_id,
+                             text=get_ressult_from_chatGPT("Українською мовою, 1-3 речення, придамай смішний анекдот"))
+
+def smishunkaVidRusakova(update, context):
+    context.bot.send_message(chat_id=update.message.chat_id,
+                             text="Смішний Русаков (або не дуже):\n")
+    context.bot.send_message(chat_id=update.message.chat_id,
+                             text=get_ressult_from_chatGPT(
+                                 "Ти вчитель фізики (нудний, інколи злий) українською мовою придамай маленький анекдот або історію"))
+
 
 bot = telegram.Bot(token=bot_token)
 updater = Updater(bot_token)
@@ -114,6 +130,7 @@ dispatcher = updater.dispatcher
 
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('jaka_para', jaka_para))
-dispatcher.add_handler(CommandHandler('chatGPT', chatGPT))
+dispatcher.add_handler(CommandHandler('smishunka', smishunka))
+dispatcher.add_handler(CommandHandler('smishunkaVidRusakova', smishunkaVidRusakova))
 
 updater.start_polling()
