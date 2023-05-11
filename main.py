@@ -1,9 +1,13 @@
 import datetime
 import telegram
 from telegram.ext import Updater, CommandHandler
+from telegram import InputMediaPhoto
 import openai
 import os
 from dotenv import load_dotenv, find_dotenv
+
+import json
+from pathlib import Path
 
 load_dotenv(find_dotenv())
 
@@ -105,20 +109,25 @@ def get_ressult_from_chatGPT(text: str):
     )
     return response['choices'][0]['message']['content']
 
-def smishunka(update, context):
+def get_image_from_dall_e(prompt: str):
+    response = openai.Image.create(
+        prompt=prompt,
+        n=1,
+        size="256x256",
+    )
+    return response["data"][0]["url"]
 
-    context.bot.send_message(chat_id=update.message.chat_id,
-                             text="Смішний ChatGPT:\n")
-    context.bot.send_message(chat_id=update.message.chat_id,
-                             text=get_ressult_from_chatGPT("Українською мовою, 1-3 речення, придамай смішний анекдот"))
+
+def smishunka(update, context):
+    context.bot.send_message(chat_id=update.message.chat_id, text="Смішний ChatGPT:\n")
+    text = get_ressult_from_chatGPT("Українською мовою, 1-3 речення, придамай смішний анекдот")
+    context.bot.send_message(chat_id=update.message.chat_id,text=text)
+    context.bot.send_photo(chat_id=update.message.chat_id, photo=get_image_from_dall_e(text))
 
 def smishunkaVidRusakova(update, context):
-    context.bot.send_message(chat_id=update.message.chat_id,
-                             text="Смішний Русаков (або не дуже):\n")
-    context.bot.send_message(chat_id=update.message.chat_id,
-                             text=get_ressult_from_chatGPT(
-                                 "Ти вчитель фізики (нудний, інколи злий) українською мовою придамай маленький анекдот або історію"))
-
+    context.bot.send_message(chat_id=update.message.chat_id,text="Смішний Русаков (або не дуже):\n")
+    text = get_ressult_from_chatGPT("Ти вчитель фізики (нудний, інколи злий) українською мовою придамай маленький анекдот або історію")
+    context.bot.send_photo(chat_id=update.message.chat_id, photo=get_image_from_dall_e(text))
 
 bot = telegram.Bot(token=bot_token)
 updater = Updater(bot_token)
