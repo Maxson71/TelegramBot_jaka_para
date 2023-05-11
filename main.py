@@ -1,13 +1,9 @@
 import datetime
 import telegram
 from telegram.ext import Updater, CommandHandler
-from telegram import InputMediaPhoto
 import openai
 import os
 from dotenv import load_dotenv, find_dotenv
-
-import json
-from pathlib import Path
 
 load_dotenv(find_dotenv())
 
