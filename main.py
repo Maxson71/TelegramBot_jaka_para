@@ -82,7 +82,7 @@ def jaka_para(update, context):
             if (day + month) % 2 == 0:
                 text = "Вища математика (Практика) 😊 12:20\nhttps://us05web.zoom.us/j/81227675458?pwd=SWFuQTZLY2w5a2dMMjd0cTdxSUN6dz09"
             else:
-                text = "Комп'ютерна логіка (Лабораторна) 😐 12:20\nА посилання Русаков знову забув скинути"
+                text = "Комп'ютерна логіка (Лабораторна) 😐 12:20\nhttps://us04web.zoom.us/j/7382214783?pwd=RnZ3SWgwK1JoVkZtNndnKzdPZjFGdz09"
         elif current_time >= 13.45 and current_time <= 15.40:
             text = "Фізика (Практика) 😬 14:15\nhttps://meet.google.com/ivm-vfpz-ugo"
         else:
@@ -122,7 +122,7 @@ def smishunka(update, context):
 
 def smishunkaVidRusakova(update, context):
     context.bot.send_message(chat_id=update.message.chat_id,text="Смішний Русаков (або не дуже):\n")
-    text = get_ressult_from_chatGPT("Ти вчитель фізики (нудний, інколи злий) українською мовою придамай маленький анекдот або історію")
+    text = get_ressult_from_chatGPT("Ти вчитель фізики (нудний, інколи злий) українською мовою придамай маленький анекдот або коротку історію")
     context.bot.send_message(chat_id=update.message.chat_id, text=text)
     context.bot.send_photo(chat_id=update.message.chat_id, photo=get_image_from_dall_e(text))
 
