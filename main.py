@@ -14,8 +14,7 @@ def start(update, context):
     context.bot.send_message(chat_id=update.message.chat_id, text='Введіть /jaka_para щоб отримати посилання на пару.'
                                                                   '\nІнші команди:'
                                                                   '\n/smishunka'
-                                                                  '\n/smishunkaVidRusakova')
-
+                                                                  '\n/history_in_japanese')
 
 def jaka_para(update, context):
     current_time = float(datetime.datetime.now().strftime("%H.%M")) + 3
@@ -113,17 +112,16 @@ def get_image_from_dall_e(prompt: str):
     )
     return response["data"][0]["url"]
 
-
 def smishunka(update, context):
     context.bot.send_message(chat_id=update.message.chat_id, text="Смішний ChatGPT:\n")
-    text = get_ressult_from_chatGPT("Українською мовою, 1-3 речення, придамай смішний анекдот")
+    text = get_ressult_from_chatGPT("Українською мовою, 1-3 речення, придамай дуже смішний анекдот")
     context.bot.send_message(chat_id=update.message.chat_id,text=text)
     context.bot.send_photo(chat_id=update.message.chat_id, photo=get_image_from_dall_e(text))
 
-def smishunkaVidRusakova(update, context):
-    context.bot.send_message(chat_id=update.message.chat_id,text="Смішний Русаков (або не дуже):\n")
-    text = get_ressult_from_chatGPT("Ти вчитель фізики (нудний, інколи злий) українською мовою придамай маленький анекдот або коротку історію")
-    context.bot.send_message(chat_id=update.message.chat_id, text=text)
+def history_in_japanese(update, context):
+    context.bot.send_message(chat_id=update.message.chat_id, text="ChatGPTによるストーリー:\n")
+    text = get_ressult_from_chatGPT("日本語で、5～6文のストーリーを書いてください。")
+    context.bot.send_message(chat_id=update.message.chat_id,text=text)
     context.bot.send_photo(chat_id=update.message.chat_id, photo=get_image_from_dall_e(text))
 
 bot = telegram.Bot(token=bot_token)
@@ -133,6 +131,6 @@ dispatcher = updater.dispatcher
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('jaka_para', jaka_para))
 dispatcher.add_handler(CommandHandler('smishunka', smishunka))
-dispatcher.add_handler(CommandHandler('smishunkaVidRusakova', smishunkaVidRusakova))
+dispatcher.add_handler(CommandHandler('history_in_japanese', history_in_japanese))
 
 updater.start_polling()
