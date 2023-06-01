@@ -118,15 +118,15 @@ def get_image_from_dall_e(prompt: str):
 
 def smishunka(update, context):
     context.bot.send_message(chat_id=update.message.chat_id, text="Смішний ChatGPT:\n")
-    text = get_result_from_chat_gpt("Українською мовою, 1-3 речення, придамай дуже смішний анекдот")
-    context.bot.send_message(chat_id=update.message.chat_id,text=text)
-    context.bot.send_photo(chat_id=update.message.chat_id, photo=get_image_from_dall_e(text))
+    result = get_result_from_chat_gpt("Українською мовою, 1-3 речення, придамай дуже смішний анекдот")
+    context.bot.send_message(chat_id=update.message.chat_id,text=result)
+    context.bot.send_photo(chat_id=update.message.chat_id, photo=get_image_from_dall_e(result))
 
 def history(update, context):
     context.bot.send_message(chat_id=update.message.chat_id, text="Історія від ChatGPT:\n")
-    text = get_result_from_chat_gpt("Напишіть розповідь з 5-6 речень українською мовою.")
-    context.bot.send_message(chat_id=update.message.chat_id,text=text)
-    context.bot.send_photo(chat_id=update.message.chat_id, photo=get_image_from_dall_e(text))
+    result = get_result_from_chat_gpt("Напишіть розповідь з 5-6 речень українською мовою.")
+    context.bot.send_message(chat_id=update.message.chat_id,text=result)
+    context.bot.send_photo(chat_id=update.message.chat_id, photo=get_image_from_dall_e(result))
 
 bot = telegram.Bot(token=bot_token)
 updater = Updater(bot_token)
