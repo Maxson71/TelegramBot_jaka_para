@@ -1,4 +1,6 @@
-python-telegram-bot==13.13
+telebot~=0.0.5
 datetime==5.1
-openai==0.27.6
+openai==0.27.7
 python-dotenv==1.0.0
+telegram~=0.0.1
+wikipedia~=1.4.0

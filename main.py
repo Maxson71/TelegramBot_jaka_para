@@ -1,8 +1,9 @@
 import datetime
-import telegram
-from telegram.ext import Updater, CommandHandler
+import telebot
 import openai
 import os
+import wikipedia
+import re
 from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
@@ -10,21 +11,34 @@ load_dotenv(find_dotenv())
 openai.api_key = os.getenv('API_TOKEN')
 bot_token = os.getenv('TELEGRAM_TOKEN')
 
-def start(update, context):
-    context.bot.send_message(chat_id=update.message.chat_id, text='Введіть /jaka_para щоб отримати посилання на пару.'
-                                                                  '\nІнші команди:'
-                                                                  '\n/next_para'
-                                                                  '\n/smishunka'
-                                                                  '\n/history')
+bot = telebot.TeleBot(bot_token)
+wikipedia.set_lang("uk")
+@bot.message_handler(commands=['start'])
+def start(message):
+    bot.send_message(message.chat.id,
+                     'Введіть /jaka_para щоб отримати посилання на пару.'
+                     '\nІнші команди:'
+                     '\n/next_para'
+                     '\n/wiki'
+                     '\n/smishunka - не працює'
+                     '\n/history - не працює')
 
-def jaka_para(n, update, context):
+@bot.message_handler(commands=['next_para'])
+def next_para(message):
+    para(4.5, message)
+
+@bot.message_handler(commands=['jaka_para'])
+def jaka_para(message):
+    para(3, message)
+
+def para(n, message):
     current_time = float(datetime.datetime.now().strftime("%H.%M")) + n
     day_of_week = datetime.datetime.today().strftime("%A")
     day = datetime.datetime.today().day
     month = datetime.datetime.today().month
 
     if n == 4.5:
-        context.bot.send_message(chat_id=update.message.chat_id, text="Наступна пара:")
+        bot.send_message(message.chat.id, "Наступна пара:")
 
     if day_of_week == "Monday":
 
@@ -94,7 +108,7 @@ def jaka_para(n, update, context):
     else:
         text="Чілим 😴"
 
-    context.bot.send_message(chat_id=update.message.chat_id, text=text)
+    bot.send_message(message.chat.id, text)
 
 def get_result_from_chat_gpt(text: str):
     response = openai.ChatCompletion.create(
@@ -116,26 +130,45 @@ def get_image_from_dall_e(prompt: str):
     )
     return response["data"][0]["url"]
 
-def smishunka(update, context):
-    context.bot.send_message(chat_id=update.message.chat_id, text="Смішний ChatGPT:\n")
-    result = get_result_from_chat_gpt("Українською мовою, 1-3 речення, придамай дуже смішний анекдот")
-    context.bot.send_message(chat_id=update.message.chat_id,text=result)
-    context.bot.send_photo(chat_id=update.message.chat_id, photo=get_image_from_dall_e(result))
+@bot.message_handler(commands=['smishunka'])
+def smishunka(message):
+    bot.send_message(message.chat.id, "Закінчився термін API ChatGPT\n")
+    # bot.send_message(message.chat.id, "Смішний ChatGPT:\n")
+    # result = get_result_from_chat_gpt("Українською мовою, 1-3 речення, придамай дуже смішний анекдот")
+    # bot.send_message(message.chat.id, result)
+    # bot.send_photo(message.chat.id, get_image_from_dall_e(result))
 
-def history(update, context):
-    context.bot.send_message(chat_id=update.message.chat_id, text="Історія від ChatGPT:\n")
-    result = get_result_from_chat_gpt("Напишіть розповідь з 5-6 речень українською мовою.")
-    context.bot.send_message(chat_id=update.message.chat_id,text=result)
-    context.bot.send_photo(chat_id=update.message.chat_id, photo=get_image_from_dall_e(result))
+@bot.message_handler(commands=['history'])
+def history(message):
+    bot.send_message(message.chat.id, "Закінчився термін API ChatGPT\n")
+    # bot.send_message(message.chat.id, "Історія від ChatGPT:\n")
+    # result = get_result_from_chat_gpt("Напишіть розповідь з 5-6 речень українською мовою.")
+    # bot.send_message(message.chat.id, result)
+    # bot.send_photo(message.chat.id, get_image_from_dall_e(result))
 
-bot = telegram.Bot(token=bot_token)
-updater = Updater(bot_token)
-dispatcher = updater.dispatcher
-
-dispatcher.add_handler(CommandHandler('start', start))
-dispatcher.add_handler(CommandHandler('jaka_para', lambda update, context: jaka_para(3, update, context)))
-dispatcher.add_handler(CommandHandler('next_para', lambda update, context: jaka_para(4.5, update, context)))
-dispatcher.add_handler(CommandHandler('smishunka', smishunka))
-dispatcher.add_handler(CommandHandler('history', history))
-
-updater.start_polling()
+def getwiki(s):
+    try:
+        ny = wikipedia.page(s)
+        wikitext=ny.content[:1000]
+        wikimas=wikitext.split('.')
+        wikimas = wikimas[:-1]
+        wikitext2 = ''
+        for x in wikimas:
+            if not('==' in x):
+                if len((x.strip()))>3:
+                   wikitext2=wikitext2+x+'.'
+            else:
+                break
+        wikitext2=re.sub('\([^()]*\)', '', wikitext2)
+        wikitext2=re.sub('\([^()]*\)', '', wikitext2)
+        wikitext2=re.sub('\{[^{}]*}', '', wikitext2)
+        return wikitext2
+    except Exception as e:
+        return 'Нічого не знайдено'
+@bot.message_handler(commands=["wiki"])
+def wiki(message):
+    bot.send_message(message.chat.id, 'Що ви хочете знайти у Wikipedia?')
+    @bot.message_handler(content_types=["text"])
+    def handle_text(m):
+        bot.send_message(m.chat.id, getwiki(m.text))
+bot.polling()
