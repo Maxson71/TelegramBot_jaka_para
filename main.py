@@ -165,10 +165,8 @@ def getwiki(s):
         return wikitext2
     except Exception as e:
         return 'Нічого не знайдено'
-@bot.message_handler(commands=["wiki"])
-def wiki(message):
-    bot.send_message(message.chat.id, 'Що ви хочете знайти у Wikipedia?')
-    @bot.message_handler(content_types=["text"])
-    def handle_text(m):
-        bot.send_message(m.chat.id, getwiki(m.text))
+@bot.message_handler(content_types=["text"])
+def handle_text(message):
+    if message.text.startswith('/wiki'):
+        bot.send_message(message.chat.id, getwiki(message.text.replace('/wiki', '').strip()))
 bot.polling()
